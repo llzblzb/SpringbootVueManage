@@ -24,8 +24,16 @@
       >
         <el-button type="danger"  slot="reference">批量删除<i class="el-icon-remove-outline"></i></el-button>
       </el-popconfirm>
-      <el-button type="primary" class="ml-5">导入<i class="el-icon-bottom" ></i></el-button>
-      <el-button type="primary" class="ml-5" >导出<i class="el-icon-top"></i></el-button>
+
+      <el-upload action="http://localhost:9090/user/import"
+                 :show-file-list=false
+                 accept="xlsx"
+                 :on-success="handleExcelImportAccess"
+                 style="display: inline-block">
+        <el-button type="primary" class="ml-5">导入<i class="el-icon-bottom" ></i></el-button>
+      </el-upload>
+
+      <el-button type="primary" class="ml-5" @click="exp" >导出<i class="el-icon-top"></i></el-button>
     </div>
 
 
@@ -69,7 +77,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageNum"
-          :page-sizes="[2, 5, 10, 20]"
+          :page-sizes="[5, 10, 15, 20]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
@@ -139,9 +147,8 @@ export default {
           address: this.address
         }
       }).then( res=> {
-        console.log(res)
-        this.tableData = res.records
-        this.total = res.total
+        this.tableData = res.data.records
+        this.total = res.data.total
 
       })
     },
@@ -167,7 +174,7 @@ export default {
     },
     save(){
       this.request.post("/user",this.form).then(res => {
-        if (res){
+        if (res.data){
           this.$message.success("保存成功")
           this.dialogFormVisible = false
           this.load()
@@ -182,7 +189,7 @@ export default {
     },
     deleteList(id){
       this.request.delete("/user/"+id).then(res => {
-        if (res){
+        if (res.data){
           this.$message.success("删除成功")
           this.dialogFormVisible = false
           this.load()
@@ -198,13 +205,20 @@ export default {
     delBatch(){
       let ids = this.multipleSelection.map(v => v.id)  //{[],[],[]} => [1,2,3]
       this.request.post("/user/del/batch",ids).then(res => {
-        if (res){
+        if (res.data){
           this.$message.success("批量删除成功")
           this.load()
         }else{
           this.$message.error("批量删除失败")
         }
       })
+    },
+    exp(){
+      window.open("http://localhost:9090/user/export")
+    },
+    handleExcelImportAccess(){
+      this.$message.success("文件导入成功")
+      this.load()
     }
   }
 
