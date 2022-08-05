@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.springbootmanage.common.Constants;
 import com.example.springbootmanage.common.Result;
 import com.example.springbootmanage.controller.dto.UserDTO;
+import com.example.springbootmanage.utils.TokenUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -50,6 +51,7 @@ public class UserController{
             return Result.error(Constants.CODE_400,"参数错误");
         }
         UserDTO dto=userService.login(userDTO);
+
         return Result.success(dto);
     }
 
