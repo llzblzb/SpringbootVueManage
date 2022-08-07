@@ -18,3 +18,8 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+files:
+  upload:
+    path: C:/Users/lzb/IdeaProjects/Vue/SpringbootManage/files/
+
+

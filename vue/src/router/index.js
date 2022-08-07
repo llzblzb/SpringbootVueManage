@@ -13,7 +13,9 @@ const routes = [
     children: [
       {path:'home',name:'主页',component: ()=> import('../views/Home.vue')},
       {path:'user',name:'用户管理',component: ()=> import('../views/User.vue')},
-      {path: 'person',name:'个人信息',component:()=>import('../views/Person')}
+      {path: 'person',name:'个人信息',component:()=>import('../views/Person.vue')},
+      {path: 'file',name:'文件管理',component:()=>import('../views/File.vue')},
+      {path: 'Role',name:'角色管理',component:()=>import('../views/Role.vue')}
 
     ]
   },
