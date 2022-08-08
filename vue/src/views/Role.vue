@@ -49,8 +49,10 @@
       <el-table-column prop="description" label="描述" >
       </el-table-column>
 
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="280" align="center">
         <template slot-scope="scope">
+          <el-button type="info" @click="selectMenu(scope.row.id)">分配菜单<i class="el-icon-menu"></i></el-button>
+
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
 
           <el-popconfirm
@@ -93,7 +95,20 @@
         <el-button type="primary" @click="save">确 定</el-button>
       </div>
     </el-dialog>
-
+    <el-dialog title="菜单分配" :visible.sync="menuDialogVisible" width="40%">
+      <el-tree
+          :props="props"
+          :data="menuData"
+          show-checkbox
+          :default-expanded-keys="[1,4]"
+          :default-checked-keys="[4]"
+          @check-change="handleCheckChange">
+      </el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="menuDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+      </div>
+    </el-dialog>
 
 
 
@@ -111,9 +126,14 @@ export default {
       pageSize: 10 ,
       name: "",
       dialogFormVisible: false,
+      menuDialogVisible: false,
       form: {},
       multipleSelection: [],
-      headerBg: 'headerBg'
+      headerBg: 'headerBg',
+      menuData: [],
+      props:{
+        label: 'name'
+      },
     }
   },
   created() {
@@ -134,6 +154,9 @@ export default {
         this.total = res.data.total
 
       })
+
+
+
     },
     handleSizeChange(pageSize){
       console.log(pageSize)
@@ -155,7 +178,7 @@ export default {
     },
     save(){
       this.request.post("/role",this.form).then(res => {
-        if (res.data){
+        if (res.code=='200'){
           this.$message.success("保存成功")
           this.dialogFormVisible = false
           this.load()
@@ -186,7 +209,7 @@ export default {
     delBatch(){
       let ids = this.multipleSelection.map(v => v.id)  //{[],[],[]} => [1,2,3]
       this.request.post("/role/del/batch",ids).then(res => {
-        if (res.data){
+        if (res.code=='200'){
           this.$message.success("批量删除成功")
           this.load()
         }else{
@@ -200,7 +223,19 @@ export default {
     handleExcelImportAccess(){
       this.$message.success("文件导入成功")
       this.load()
-    }
+    },
+    selectMenu(roleId) {
+      this.menuDialogVisible = true
+
+      //请求菜单数据
+      this.request.get("/menu").then( res=> {
+        this.menuData = res.data
+
+      })
+    },
+    handleCheckChange(data, checked, indeterminate) {
+      console.log(data, checked, indeterminate);
+    },
   }
 
 

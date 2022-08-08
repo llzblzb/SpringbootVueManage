@@ -3,7 +3,9 @@ package ${package.Controller};
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import com.example.springbootmanage.common.Result;
 import javax.annotation.Resource;
 import java.util.List;
 
