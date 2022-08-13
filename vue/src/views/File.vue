@@ -6,7 +6,7 @@
       <el-button class="ml-5" type="primary" @click="reset">重置</el-button>
     </div>
     <div style="margin: 10px 0">
-      <el-upload action="http://localhost:9090/file/upload"
+      <el-upload :action="'http://'+serverIp+':9090/file/upload'"
                  :show-file-list=false
                  :on-success="handleFileUploadAccess"
                  style="display: inline-block">
@@ -80,10 +80,13 @@
 </template>
 
 <script>
+import {serverIp} from "../../public/config";
+
 export default {
   name: "File",
   data() {
     return {
+      serverIp: serverIp,
       tableData: [],
       name: '',
       multipleSelection: [],

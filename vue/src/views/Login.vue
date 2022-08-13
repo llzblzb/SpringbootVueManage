@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import {setRoutes} from "@/router";
+
 export default {
   name: "Login",
   data() {
@@ -44,12 +46,14 @@ export default {
         if (valid) {
           this.request.post("/user/login", this.user).then(res => {
             if (res.code === "200") {
-              localStorage.setItem("user",JSON.stringify(res.data))  //存储用户信息到浏览器
-              setTimeout(() => {
-                this.$router.push("/"), 5000
-                this.$message.success("登录成功")
-              })
+              localStorage.setItem("user", JSON.stringify(res.data))  //存储用户信息到浏览器
+              localStorage.setItem("menus", JSON.stringify(res.data.menus))  //存储用menus信息到浏览器
 
+
+              //动态设置当前设置的路由
+              setRoutes()
+              this.$router.push("/")
+              this.$message.success("登录成功")
             } else {
               this.$message.error(res.msg)
             }

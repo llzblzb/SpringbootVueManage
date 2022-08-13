@@ -25,7 +25,7 @@
         <el-button type="danger"  slot="reference">批量删除<i class="el-icon-remove-outline"></i></el-button>
       </el-popconfirm>
 
-      <el-upload action="http://localhost:9090/user/import"
+      <el-upload :action="'http://'+serverIp+':9090/user/import'"
                  :show-file-list=false
                  accept="xlsx"
                  :on-success="handleExcelImportAccess"
@@ -46,6 +46,8 @@
       </el-table-column>
       <el-table-column prop="username" label="用户名" width="140">
       </el-table-column>
+      <el-table-column prop="role" label="角色" width="120">
+      </el-table-column>
       <el-table-column prop="nickname" label="昵称" width="120">
       </el-table-column>
       <el-table-column prop="phone" label="电话" width="120">
@@ -54,6 +56,7 @@
       </el-table-column>
       <el-table-column prop="address" label="地址" width="120">
       </el-table-column>
+
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
@@ -89,6 +92,12 @@
         <el-form-item label="用户名">
           <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="角色">
+          <el-select clearable v-model="form.role" placeholder="请选择角色" style="width: 100%">
+            <el-option v-for="item in roles" :key="item.name" :label="item.name" :value="item.flag"></el-option>
+
+          </el-select>
+        </el-form-item>
         <el-form-item label="昵称">
           <el-input v-model="form.nickname" autocomplete="off"></el-input>
         </el-form-item>
@@ -101,6 +110,7 @@
         <el-form-item label="地址">
           <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -115,10 +125,13 @@
 </template>
 
 <script>
+import {serverIp} from "../../public/config";
+
 export default {
   name: "User",
   data() {
     return{
+      serverIp: serverIp,
       tableData: [],
       total: 0,
       pageNum: 1,
@@ -129,7 +142,8 @@ export default {
       dialogFormVisible: false,
       form: {},
       multipleSelection: [],
-      headerBg: 'headerBg'
+      headerBg: 'headerBg',
+      roles: [],
     }
   },
   created() {
@@ -145,11 +159,16 @@ export default {
           username: this.username,
           email: this.email,
           address: this.address
+
         }
       }).then( res=> {
         this.tableData = res.data.records
         this.total = res.data.total
 
+      })
+
+      this.request.get("/role").then(res=>{
+        this.roles =res.data
       })
     },
     handleSizeChange(pageSize){
@@ -214,7 +233,7 @@ export default {
       })
     },
     exp(){
-      window.open("http://localhost:9090/user/export")
+      window.open(`http://${serverIp}:9090/user/export`)
     },
     handleExcelImportAccess(){
       this.$message.success("文件导入成功")

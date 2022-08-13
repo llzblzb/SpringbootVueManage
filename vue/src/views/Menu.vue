@@ -24,7 +24,7 @@
         <el-button type="danger" slot="reference">批量删除<i class="el-icon-remove-outline"></i></el-button>
       </el-popconfirm>
 
-      <!--      <el-upload action="http://localhost:9090/user/import"-->
+      <!--      <el-upload :action="'http://'+serverIp+':9090/user/import'"-->
       <!--                 :show-file-list=false-->
       <!--                 accept="xlsx"-->
       <!--                 :on-success="handleExcelImportAccess"-->
@@ -43,15 +43,20 @@
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55">
       </el-table-column>
-      <el-table-column prop="id" label="id" width="80">
+      <el-table-column prop="id" label="id" width="80" align="center">
       </el-table-column>
-      <el-table-column prop="name" label="名称">
+      <el-table-column prop="name" label="名称" align="center">
       </el-table-column>
-      <el-table-column prop="path" label="路径">
+      <el-table-column prop="path" label="路径" align="center">
       </el-table-column>
-      <el-table-column prop="icon" label="图标">
+      <el-table-column prop="pagePath" label="页面路径" align="center">
       </el-table-column>
-      <el-table-column prop="description" label="描述">
+      <el-table-column label="图标" align="center">
+        <template slot-scope="scope">
+          <i :class="scope.row.icon" style="font-size: 25px;"/>
+        </template>
+      </el-table-column>
+      <el-table-column prop="description" label="描述" align="center">
       </el-table-column>
       <el-table-column label="操作" width="280" align="center">
         <template slot-scope="scope">
@@ -76,7 +81,7 @@
     </el-table>
 
 
-    <el-dialog title="菜单信息" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog title="菜单信息" :visible.sync="dialogFormVisible" width="40%">
       <el-form label-width="80px" size="small">
         <el-form-item label="名称">
           <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -84,8 +89,15 @@
         <el-form-item label="路径">
           <el-input v-model="form.path" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="页面路径">
+          <el-input v-model="form.pagePath" autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="图标">
-          <el-input v-model="form.icon" autocomplete="off"></el-input>
+            <el-select clearable v-model="form.icon" placeholder="请选择" style="width: 100%">
+              <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.value">
+                <i :class="item.value"/> {{item.name}}
+              </el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="form.description" autocomplete="off"></el-input>
@@ -119,6 +131,7 @@ export default {
       form: {},
       multipleSelection: [],
       headerBg: 'headerBg',
+      options: [],
 
 
     }
@@ -159,7 +172,11 @@ export default {
       if (pid){
         this.form.pid = pid
       }
+      this.request.get("/dict/icons").then(res => {
+        this.options = res.data
 
+
+      })
     },
     save() {
       this.request.post("/menu", this.form).then(res => {
@@ -175,6 +192,12 @@ export default {
     handleEdit(row) {
       this.form = Object.assign({}, row)
       this.dialogFormVisible = true
+
+      this.request.get("/dict/icons").then(res => {
+        this.options = res.data
+
+
+      })
     },
     deleteList(id) {
       this.request.delete("/menu/" + id).then(res => {

@@ -41,6 +41,8 @@ public class FileController {
     @Value("${files.upload.path}")
     private String fileUploadPath;
 
+    @Value("${server.ip}")
+    private String serverIp;
     /**
      * 文件上传接口
      * @param file 前端上传过来的文件
@@ -82,7 +84,7 @@ public class FileController {
             uploadFile.delete();
         }else {
             //数据库若不存在重复文件，则不删除刚刚上传文件
-            url="http://localhost:9090/file/" + fileUUID;
+            url="http://"+ serverIp +":9090/file/" + fileUUID;
         }
 
 

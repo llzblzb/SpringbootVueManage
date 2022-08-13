@@ -1,6 +1,9 @@
 package com.example.springbootmanage.controller.dto;
 
+import com.example.springbootmanage.entity.Menu;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 类描述：接收前端请求参数
@@ -18,4 +21,6 @@ public class UserDTO {
     private String nickname;
     private String avatarUrl;
     private String token;
+    private String role;
+    private List<Menu> menus;
 }

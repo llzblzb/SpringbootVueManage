@@ -13,7 +13,7 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+
 
 /**
  * 类描述：
@@ -25,7 +25,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
  */
 
 @Configuration
-@EnableOpenApi
 public class SwaggerConfig {
     /**
      * 创建API应用
@@ -39,7 +38,7 @@ public class SwaggerConfig {
     public Docket restApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("标准接口")
-                .apiInfo(apiInfo("Spring Boot中使用Swagger3构建RESTful APIs", "1.0"))
+                .apiInfo(apiInfo("Spring Boot中使用Swagger2构建RESTful APIs", "1.0"))
                 .useDefaultResponseMessages(true)
                 .forCodeGeneration(false)
                 .select()
