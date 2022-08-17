@@ -1,6 +1,6 @@
 <template>
   <div>
-    嗯嘛，暂时没有新闻
+    暂时没有新闻哦
   </div>
 </template>
 

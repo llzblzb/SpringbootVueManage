@@ -46,7 +46,10 @@
       </el-table-column>
       <el-table-column label="启用">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.enable" active-color="#13ce66" inactive-color="#ccc" @click="changeEnable(scope.row)"></el-switch>
+          <el-switch v-model="scope.row.enable"
+                     active-color="#13ce66"
+                     inactive-color="#ccc"
+                     @change ="changeEnable(scope.row)"></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">

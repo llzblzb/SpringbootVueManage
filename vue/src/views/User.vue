@@ -47,6 +47,13 @@
       <el-table-column prop="username" label="用户名" width="140">
       </el-table-column>
       <el-table-column prop="role" label="角色" width="120">
+        <template slot-scope="scope">
+          <el-tag type="warning" v-if="scope.row.role ==='ROLE_ADMIN'">管理员</el-tag>
+          <el-tag type="primary" v-if="scope.row.role ==='ROLE_USER'">普通用户</el-tag>
+          <el-tag type="success" v-if="scope.row.role ==='ROLE_STUDENT'">学生</el-tag>
+          <el-tag type="warning" v-if="scope.row.role ==='ROLE_TEACHER'">教师</el-tag>
+          <el-tag type="primary" v-if="scope.row.role ==='ROLE_SPECIAL'">特殊用户</el-tag>
+        </template>
       </el-table-column>
       <el-table-column prop="nickname" label="昵称" width="120">
       </el-table-column>
@@ -57,8 +64,10 @@
       <el-table-column prop="address" label="地址" width="120">
       </el-table-column>
 
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="500" align="center">
         <template slot-scope="scope">
+          <el-button type="primary" @click="lookCourse(scope.row.courses)" v-if="scope.row.role==='ROLE_TEACHER'">查看教授课程<i class="el-icon-document"></i></el-button>
+          <el-button type="info" @click="lookStuCourse(scope.row.stuCourses)" v-if="scope.row.role==='ROLE_STUDENT'">查看已选课程<i class="el-icon-document"></i></el-button>
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
 
           <el-popconfirm
@@ -95,7 +104,6 @@
         <el-form-item label="角色">
           <el-select clearable v-model="form.role" placeholder="请选择角色" style="width: 100%">
             <el-option v-for="item in roles" :key="item.name" :label="item.name" :value="item.flag"></el-option>
-
           </el-select>
         </el-form-item>
         <el-form-item label="昵称">
@@ -118,8 +126,19 @@
       </div>
     </el-dialog>
 
+    <el-dialog title="教授课程信息" :visible.sync="CourseFormVisible" width="30%" >
+      <el-table :data="courses">
+        <el-table-column prop="name" label="课程名称"></el-table-column>
+        <el-table-column prop="score" label="学分"></el-table-column>
+      </el-table>
+    </el-dialog>
 
-
+    <el-dialog title="课程信息" :visible.sync="stuCourseFormVisible" width="30%" >
+      <el-table :data="stuCourses">
+        <el-table-column prop="name" label="课程名称"></el-table-column>
+        <el-table-column prop="score" label="学分"></el-table-column>
+      </el-table>
+    </el-dialog>
 
   </div>
 </template>
@@ -140,10 +159,14 @@ export default {
       email: "",
       address: "",
       dialogFormVisible: false,
+      CourseFormVisible: false,
+      stuCourseFormVisible: false,
       form: {},
       multipleSelection: [],
       headerBg: 'headerBg',
       roles: [],
+      courses: [],
+      stuCourses: [],
     }
   },
   created() {
@@ -238,6 +261,14 @@ export default {
     handleExcelImportAccess(){
       this.$message.success("文件导入成功")
       this.load()
+    },
+    lookCourse(courses){
+      this.courses = courses
+      this.CourseFormVisible = true
+    },
+    lookStuCourse(stuCourses){
+      this.stuCourses = stuCourses;
+      this.stuCourseFormVisible = true
     }
   }
 

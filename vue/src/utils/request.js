@@ -4,7 +4,7 @@ import {serverIp} from "../../public/config";
 
 const request = axios.create({
     baseURL: `http://${serverIp}:9090`,  // 注意！！ 这里是全局统一加上了 后端接口前缀 前缀，后端必须进行跨域配置！
-    timeout: 5000
+    timeout: 50000
 })
 
 // request 拦截器

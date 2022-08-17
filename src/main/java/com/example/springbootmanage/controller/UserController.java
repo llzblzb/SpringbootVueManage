@@ -86,6 +86,14 @@ public class UserController{
         return Result.success(userService.list());
     }
 
+    @GetMapping("/role/{role}")
+    public Result findUsersByRole(@PathVariable String role) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role",role);
+        List<User> list = userService.list(queryWrapper);
+        return Result.success(list);
+    }
+
     @GetMapping("/username/{username}")
     public Result findOne(@PathVariable String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -112,20 +120,20 @@ public class UserController{
                                @RequestParam(defaultValue = "") String username,
                                @RequestParam(defaultValue = "") String email,
                                @RequestParam(defaultValue = "") String address) {
-        IPage<User> page = new Page<>(pageNum, pageSize);
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        if (!"".equals(username)) {
-            queryWrapper.like("username", username);
-        }
-        if (!"".equals(email)) {
-            queryWrapper.like("email", email);
-        }
-        if (!"".equals(address)) {
-            queryWrapper.like("address", address);
-        }
-        queryWrapper.orderByDesc("id");
+//        IPage<User> page = new Page<>(pageNum, pageSize);
+//        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+//        if (!"".equals(username)) {
+//            queryWrapper.like("username", username);
+//        }
+//        if (!"".equals(email)) {
+//            queryWrapper.like("email", email);
+//        }
+//        if (!"".equals(address)) {
+//            queryWrapper.like("address", address);
+//        }
+//        queryWrapper.orderByDesc("id");
 
-        return Result.success(userService.page(new Page<>(pageNum, pageSize), queryWrapper));
+        return Result.success(userService.findPage(new Page<>(pageNum, pageSize), username,email,address));
     }
     /**
      * 导出接口
