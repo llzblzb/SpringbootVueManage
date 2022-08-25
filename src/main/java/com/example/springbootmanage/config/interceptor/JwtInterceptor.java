@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.springbootmanage.common.Constants;
+import com.example.springbootmanage.config.AuthAccess;
 import com.example.springbootmanage.entity.User;
 import com.example.springbootmanage.exception.ServiceException;
 import com.example.springbootmanage.service.IUserService;
@@ -38,6 +39,17 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
+
+        //判断接口是否有@AuthAccess自定义注解若有则放行
+        if(!(handler instanceof HandlerMethod)){
+            return true;
+        }else {
+            HandlerMethod h = (HandlerMethod) handler;
+            AuthAccess authAccess = h.getMethodAnnotation(AuthAccess.class);
+            if (authAccess != null){
+                return true;
+            }
+        }
         //如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)) {
             return true;

@@ -1,5 +1,5 @@
 server:
-  ip: 39.108.13.123
+  ip: 43.139.4.28
   port: 9090
 
 spring:
@@ -7,7 +7,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-#    url: jdbc:mysql://39.108.13.123:3306/manage?serverTimezone=GMT%2b8
+#    url: jdbc:mysql://43.139.4.28:3306/manage?serverTimezone=GMT%2b8
     url: jdbc:mysql://localhost:3306/manage?serverTimezone=GMT%2b8
     username: root
     password: 745632
@@ -22,6 +22,6 @@ mybatis-plus:
 
 files:
   upload:
-    path: C:/Users/lzb/IdeaProjects/Vue/SpringbootManage/files/   本地
+    path: C:/Users/lzb/IdeaProjects/Vue/SpringbootManage/files/
 #    path: /home/files/
 

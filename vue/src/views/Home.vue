@@ -3,6 +3,7 @@
     <el-card style="font-size: 30px">
       <el-row style="color: red">
         欢迎来到我的主页！
+        <el-button @click="toFront">前台测试首页</el-button>
       </el-row>
       <el-row style="color: #3F5EF8">
         Welcome to my homepage!
@@ -36,6 +37,11 @@ export default {
   data() {
     return {}
   },
+  methods:{
+    toFront(){
+      this.$router.replace('/front/home')
+    },
+  }
 }
 
 </script>

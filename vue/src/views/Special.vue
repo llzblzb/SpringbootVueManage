@@ -8,7 +8,7 @@
     <el-card class="dis1">
       <img
           style="width: 100% ;height: 100%;"
-          src="http://39.108.13.123:9090/file/ce3c37ea529745039b51289df4b79ac4.png">
+          src="http://43.139.4.28:9090/file/84be774ec00b4121ac6ac5ef83cc21b1.png">
     </el-card>
 
     
